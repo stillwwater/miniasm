@@ -18,14 +18,14 @@ Here are some example programs:
 
 ```assembly
 mov out "hello world!"
-io out					; hello world!
+io out			; hello world!
 ```
 
 ```assembly
 ;; this is a label
 ;; it can be used like a macro to group instructions
 print (str s):
-	mov out &s			; change 'mov' to 'add' for a superior implementation
+	mov out &s	; change 'mov' to 'add' for a superior implementation
 	io out
 end
 
