@@ -1,0 +1,48 @@
+﻿using MiniASM.APIs;
+using MiniASM;
+using MiniASM.Builtin;
+
+namespace MiniASM.APIs.STD
+{
+    public class Keywords : MiniAPI
+    {
+        public void Mov(Symbol<int> ptr, MetaSymbol value) {
+            mini.SetAddress(ptr.Value, value);
+        }
+
+        public MetaSymbol Mov(MetaSymbol value) {
+            return value;
+        }
+        
+        public void For(Symbol<int> ptr, Symbol<float> max, Symbol<int> label) {
+            var fun = mini.GetAddress<Instruction>(label.Value, Tokens.LBL, Tokens.FUN).Value;
+
+            object o = mini.FindObject(fun.ObjectIdentifier, noerror: true);
+            o = o ?? mini;
+
+            int itreg = ptr.Value;
+            var args = new MetaSymbol[0];
+
+            for (int i = 0; i < max.Value; i++) {
+                mini.SetAddress(itreg, new Symbol<float>(Tokens.NUM, i));
+                fun.Call(args, o);
+            }
+        }
+
+        public void For(Symbol<int> ptr, Symbol<int> max, Symbol<int> label) {
+            For(ptr, mini.GetRegister<float>(max.Value, Tokens.NUM), label);
+        }
+
+        public static void CreateReference() {
+            CreateReference("kw", new Keywords());
+        }
+
+        public override void Init(Interpreter mini) {
+            this.mini = mini;
+            AddFun("Mov", MetaSymbol.Ptr, MetaSymbol.Any);
+            AddFun("Mov", MetaSymbol.Any);
+            AddFun("For", MetaSymbol.Ptr, MetaSymbol.Num, MetaSymbol.Ptr);
+            AddFun("For", MetaSymbol.Ptr, MetaSymbol.Ptr, MetaSymbol.Ptr);
+        }
+    }
+}

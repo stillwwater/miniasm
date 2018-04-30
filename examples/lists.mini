@@ -1,0 +1,13 @@
+section ex:
+	;; get the average of a list of numbers
+	;; => avg num (10 20 34 58 23) -> 29
+	avg (list nums):
+		num res : 0
+		for cx &nums sum	; sum numbers in list
+		size &nums
+		div res &ax		; divide sum by size of list
+		mov ax &res
+	sum:
+		add res &cx
+	end
+ends

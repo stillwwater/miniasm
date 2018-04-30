@@ -1,0 +1,21 @@
+section ex:
+	99bottles:
+		num bottle : 100
+		jmp nextbottle
+	nextbottle:
+		dec bottle
+		str &bottle		; convert bottle to string
+		mov out &ax		; push bottle to output register
+		add out ' bottles of beer on the wall, '
+		str &bottle
+		add out &ax
+		print ' bottles of beer'
+		mov out 'take one down and pass it around, '
+		sub &bottle 1
+		str &ax
+		add out &ax
+		print ' bottles of beer on the wall.'
+		cmp &bottle 1
+		jg nextbottle		; loop while bottle is greater than 1
+	end
+ends

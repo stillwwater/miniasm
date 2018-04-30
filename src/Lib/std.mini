@@ -1,0 +1,87 @@
+#include std
+#include stdio
+#include kw
+#include comp
+#include string
+#include vector
+#include list
+#include math
+
+#define ax R1
+#define ip R2
+#define rx R4
+#define in R6
+#define out R7
+#define cx R9
+#define true 1
+#define false 0
+
+require $kw
+require $comp
+require $string
+require $vector
+require $list
+require $math
+
+section std:
+	;; prints error message
+	error (str msg):
+		mov out 'script error: '
+		print &msg
+	end
+
+	;; prints error message with location
+	error (str msg, int callptr):
+		error &msg
+		mov out ' at address '
+		print callptr
+	end
+
+	throw (str msg, int callptr):
+		error &msg &callptr	; print error and address
+		mov R0 -1		; exit interpreter
+	end
+
+	halt:
+		mov R0
+	end
+
+	print (any 017d773f):
+		mov out &017d773f
+		io out
+	end
+
+	print (str 017d773e):
+		add out &017d773e
+		io out
+	end
+
+	pcx:
+		print &cx
+	end
+
+	;; increments address
+	inc (int 016d592f):
+		add &016d592f 1
+	end
+
+	;; decrements address
+	dec (int 016c273f):
+		sub &016c273f 1
+	end
+
+	;; sets multiple registers to a value
+	setall (list registers, any 00a2737f):
+		for cx &registers setall.a
+	setall.a:
+		mov &cx &00a2737f
+	end
+
+	mov ax 0
+	mov rx 0
+	mov R5 0
+	mov R8 0
+	mov R9 0
+	mov in ""
+	mov out ""
+ends

@@ -1,0 +1,14 @@
+section ex:
+	;; returns factorial of n
+	;; => f! 5 -> 120
+	f! (num n):
+		num a : 1
+		jmp f!.b
+		mov ax &a
+	f!.b:
+		mul a &n
+		dec n
+		cmp &n 1
+		jg f!.b			; if &n > 1 jmp to f!.b
+	end
+ends

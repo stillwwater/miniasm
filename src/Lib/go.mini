@@ -1,0 +1,105 @@
+#define rx R4
+#define ry R5
+#define rz R6
+#define gx R20
+#define pos R21
+#define scl R22
+#define rot R23
+#define scenesize R24
+#define buffersize R25
+#define currentbuffermode R26
+
+#include std
+#include game
+
+section go:
+	;; overload of go.spawn <str> that spawns an object
+	;; at a specific location
+	spawn (str object, vec position):
+		go.spawn &object
+		go.push &ax
+		go.fmove &position
+		go.pop
+	end
+
+	;; overload of go.push <str> that pushes multiple
+	;; objects to the gameobject stack
+	push (list objects):
+		for cx &objects push.1
+	push.1:
+		go.push &cx
+	end
+
+	;; helper that executes a trasform function on the
+	;; buffer, transforming it to a non relative vector
+	;; R10: pointer to instruction to call
+	;; R11: current vector value of the transform
+	;; R12: desired vector value of the transform
+	fixed (int fptr, vec from, vec to):
+		go.buffermode $single
+		sub to &from
+		jmp &fptr &to
+		go.buffermode $multi
+	end
+
+
+	;; moves a single gameobject to an exact location
+	;; R10: position
+	fmove (vec newpos):
+		go.fixed go.move &pos &newpos
+	end
+
+	;; rotates a single gameobject to an exact rotation
+	;; R10: rotation
+	frotate (vec newrot):
+		go.fixed go.rotate &rot &newrot
+	end
+
+	;; scales a single gameobject to an exact scale
+	;; R10: scale
+	fscale (vec newscl):
+		go.fixed go.scale &scl &newscl
+	end
+
+	;; creates a solid box with gamobjects
+	box (str object, vec scale):
+		go.buffermode $single	; transformations only apply to what's in the top of the stack
+		for cx &scale spawnobj	; for (x y z)
+		go.buffermode $multi	; transformations apply to everything in the buffer stack
+	spawnobj:
+		go.spawn &object
+		go.push &ax
+		go.move &cx
+	end
+
+	;; randomly places objects in a grid
+	rplace (str prefab, vec scale, num threshold):
+		var objs: str ( )	; list to hold references to spawned objects
+		mov pos (0 0 0)		; reset global origin
+		for cx &scale getrand
+		go.push &objs		; push spawned objects to the game object stack
+	getrand:
+		rand
+		cmp &threshold &ax
+		jg spawnobj
+	spawnobj:
+		go.spawn &prefab		
+		go.push &ax
+		go.move &cx
+		go.pop
+		push objs &ax		; push reference to object to objs list
+	end
+
+	stairs (str object, vec scale, vec dir):
+		go.stairs &object &scale &dir false
+	end
+
+	mov rx 0
+	mov ry 0
+	mov rz 0
+	mov pos 0
+	mov scl 0
+	mov rot 0
+	
+	go.buffermode $multi
+ends

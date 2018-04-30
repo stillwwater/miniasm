@@ -1,0 +1,13 @@
+section ex:
+	;; prints even numbers up to n using a for loop
+	;; => odds 10 -> 1 3 5 7 9
+	odds (num n):
+		for cx &n odd?		; for cx = 0; cx < &n; cx++; jmp odd?
+	odd?:
+		mod &n 2		; move the result of mod &n 2 to the acumulator
+		cmp &ax 0		; compare the acumulator to 0
+		jne pnum		; print n if accumulator is not 0 (&n mod 2 != 0)
+	pnum:
+		print n
+	end
+ends

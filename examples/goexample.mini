@@ -1,0 +1,107 @@
+section ex:
+	;; creates a box using a gameobject
+	;; requires the 'go' section
+	;; => box $cube (4 4 4)
+	box (str prefab, vec scale):
+		go.clear		; clear the buffer
+		for cx &scale box.b	; for (x y z) spawn object at (x y z)
+	box.b:
+		go.spawn &prefab	; spawn the object
+		go.push &ax		; push object to buffer
+		go.move &cx		; move the object
+		go.pop			; remove the object from the buffer
+	end
+
+	;; creates a box using a gameobject
+	;; saves created game objects to buffer
+	;; requires the 'go' section
+	;; => buffbox $cube (4 4 4)
+	buffbox (str prefab, vec scale):
+		go.buffermode $single	; transformations only apply to the object
+					; at the top of the buffer stack
+		for cx &scale box.b	; for (x y z) spawn object at (x y z)
+		go.buffermode $multi	; transformations apply to all objects in buffer stack
+	box.b:
+		go.spawn &prefab	; spawn the object
+		go.push &ax		; push object to the buffer
+		go.move &cx		; move the object at the top of the buffer stack
+	end
+
+	;; creates a box using a gameobject
+	;; saves created game objects to buffer without changing the buffermode
+	;; generally there is no reason to prefer this method over changing
+	;; the buffermode with 'go.buffermode $single|$multi'
+	;; requires the 'go' section
+	;; => buffboxcopy $cube (4 4 4)
+	buffboxcopy (str prefab, vec scale):
+		go.clear		; clear the buffer
+		var objs : str ( )	; create a list to store the ids of the created objects
+		for cx &scale box.b	; for (x y z) spawn object at (x y z)
+		go.push &objs		; push all objects created to the buffer
+	box.b:
+		go.spawn &prefab	; spawn the object
+		push objs &ax		; push a reference to the object to the list
+		go.push &ax		; push object to the buffer
+		go.move &cx		; move the object
+		go.pop			; remove the object from the buffer
+	end
+	
+	;; randomly places objects in a grid
+	rplace (str prefab, vec scale, num threshold):
+		var objs: str ( )	; list to hold references to spawned objects
+		mov pos (0 0 0)		; reset global origin
+		for cx &scale getrand
+		go.push &objs		; push spawned objects to the game object stack
+	getrand:
+		rand
+		cmp &threshold &ax
+		jg spawnobj
+	spawnobj:
+		go.spawn &prefab		
+		go.push &ax
+		go.move &cx
+		go.pop
+		push objs &ax		; push reference to object to objs list
+	end
+	
+	;; builds stairs from gameobject
+	stairs (str object, vec scale, vec dir, num reversed?):
+		mov R14 str ( )		; objecs spawned
+		go.clear
+		mov R15 &scale $z	; depth
+		mov R16 &scale $x	; length
+		mov R17 &scale $y	; height
+		mov rx &dir $x		; x direction
+		mov ry &dir $y		; y direction
+		mov R18 (0 0 0)		; offsets
+		mov R19 &R18
+		mov R18 $x &rx		; R18 = (rx 0 0)
+		mov R19 $y &ry		; R19 = (0 ry 0)
+		cmp &reversed? true
+		je stairs.reversed	; reversed mode
+		for cx &R15 stairs.z
+		go.push &R14
+	stairs.reversed:
+		mov ax &R18		; swap R18 and R19
+		mov R18 &R19
+		mov R19 &ax
+	stairs.node:
+		go.spawn &object
+		mov rx &pos
+		add rx &ry
+		go.push &ax
+		go.move &rx
+		go.pop
+		push R14 &ax;
+	stairs.z:
+		mov pos (0 0 0)		; reset origin
+		for cx &R16 stairs.x
+	stairs.x:
+		mov ry &R19		; copy R19 to ry
+		jmp stairs.node
+		for cx &R17 stairs.y
+	stairs.y:
+		mov ry &R18
+		jmp stairs.node
+	end
+ends
