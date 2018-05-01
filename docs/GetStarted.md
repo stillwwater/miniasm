@@ -25,12 +25,21 @@ By default, variables (like instructions and registers) are passed by reference.
 ```assembly
 num x: 8
 add x 3		; adds 3 to x
-print x		; <num> 11
+print &x	; <num> 11
 
 num y: 8
 add &y 3	; adds 3 and the value in y, storing the answer in the accumulator
 print &y	; <num> 4 (y is unchanged)
 print &ax	; <num> 11
+```
+
+To assign a variable to nil use an empty `&` operator:
+
+```assembly
+var x: &
+
+print &x	; <nil>
+print &		; <nil>
 ```
 
 Variable types:
@@ -76,17 +85,17 @@ Labels support overloading, by giving them a different signature.
 
 ```assembly
 mylabel (str s):
-	print s
+	print &s
 end
 
 mylabel (num x):
 	mul x 2
-	print x
+	print &x
 end
 
 mylabel (int x):
 	mul x 4
-	print x
+	print &x
 end
 
 mylabel "7"	; <str> 7
@@ -114,7 +123,7 @@ Documentation can be defined before the label's header using `;;`.
 ;; adds b to a and prints a
 myadd (num a, num b):
 	add a &b
-	print a
+	print &a
 end
 
 help myadd	; prints documentation to the console

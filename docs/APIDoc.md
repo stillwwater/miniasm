@@ -268,6 +268,12 @@ for cx &mylist pcx	; 0 2 4 6 8
 
 `perlin (vec pos) -> num`: Returns  Perlin noise value at `pos`
 
+## tools :: APis.STD.Tools
+
+`allocate -> int`: Pushes `nil` to new address, returns the address
+
+`define (str label, int address) -> nil`: Defines a variable
+
 ## std :: native
 
 `error (str msg) -> nil`: Outputs error

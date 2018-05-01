@@ -286,7 +286,7 @@ namespace MiniASM
 
             if (!isLabelOpen && line.Contains(Tokens.DEF) && Tokens.ValidType(first)) {
                 // this defines a variable
-                // <type> <identifier> ':' <arg> 
+                // <type> <identifier> ':' <arg>
                 string[] tokens = line.Split(Tokens.DEF_MARKER);
 
                 if (tokens.Length < 2) {
@@ -568,7 +568,7 @@ namespace MiniASM
                     continue;
                 }
 
-                word = preprocessor.ReplaceDefined(word);             
+                word = preprocessor.ReplaceDefined(word);
 
                 //
                 // STEP 3:
@@ -610,9 +610,10 @@ namespace MiniASM
                 }
 
                 if (word[0] == Tokens.VALUE_MARKER) {
-                    // token is a '&', this requires a token after it
+                    // token is a '&', this requires a token after it, otherwise it's nil
                     if (word.Length < 2) {
-                        throw new SyntaxError("<any>", "<nil>");
+                        tokens.Add(MetaSymbol.Nil);
+                        continue;
                     }
 
                     // remove '&'
@@ -915,7 +916,7 @@ namespace MiniASM
         }
 
         /// <summary>
-        /// Gets a register and casts the value to a desired type 
+        /// Gets a register and casts the value to a desired type
         /// </summary>
         public Symbol<T> GetRegister<T>(int register, string type) {
             MetaSymbol value = GetRegister(register);
@@ -935,7 +936,7 @@ namespace MiniASM
         }
 
         /// <summary>
-        /// Gets a register and casts the value to a desired type 
+        /// Gets a register and casts the value to a desired type
         /// </summary>
         public Symbol<T> GetAddress<T>(int addr, params string[] types) {
             MetaSymbol value = GetRegister(addr);
