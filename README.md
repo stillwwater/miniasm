@@ -2,8 +2,6 @@
 
 MiniASM is a small programming language I created to aid with game development. There are many languages that can be embedded in the C# runtime, but none of those are weird enough.
 
-The syntax is minimal, each line is either a definition, or an expression consisting of an optional return address, followed by an instruction, followed by zero or more arguments.
-
 Check out the get started guide, how to extend interpreter functionality and the API docs to become more familiar with the use of the language:
 
 - [Get Started](docs/GetStarted.md)
@@ -103,7 +101,7 @@ nextbottle:
 	add out &ax
 	print ' bottles of beer'
 	mov out 'take one down and pass it around, '
-    sub &bottle 1
+	sub &bottle 1
 	str &ax
 	add out &ax
 	print ' bottles of beer on the wall.'
