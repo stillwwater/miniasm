@@ -56,6 +56,11 @@ section std:
 		io out
 	end
 
+	peek (int 017d773d):
+		add &017d773d int 1
+		peek &017d773d &ax
+	end
+
 	pcx:
 		print &cx
 	end

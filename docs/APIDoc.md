@@ -9,6 +9,10 @@ Loads APIs into memory.
 
 `peek -> nil`: Prints memory contents
 
+`peek (num batch_size) -> nil`: Slower, but uses less memory than `peek`
+
+`peek (int start, int end) -> nil`: Show contents from address `start` (inclusive) to address `end` (exclusive)
+
 `help (str instruction) -> nil`: Returns the documentation for an instruction
 
 `dump -> nil`: Dumps memory contents to `mini.dmp`
@@ -287,6 +291,8 @@ for cx &mylist pcx	; 0 2 4 6 8
 `print (any msg) -> nil`: Prints to the console
 
 `print (str msg) -> nil`: Prints `out` plus `msg` to the console
+
+`peek (int addr) -> nil`: Print data stored in `addr`
 
 `pcx -> nil`: Prints contents in the counter register (`CX`)
 

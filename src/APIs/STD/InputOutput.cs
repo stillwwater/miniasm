@@ -1,6 +1,7 @@
 ﻿using MiniASM.APIs;
 using MiniASM;
 using System.IO;
+using System.Text;
 using System;
 using MiniASM.Builtin;
 
@@ -10,6 +11,27 @@ namespace MiniASM.APIs.STD
     {
         public void Peek() {
             StandardAPI.output(mini);
+        }
+
+        public void Peek(Symbol<float> batchSize) {
+            var block = new StringBuilder();
+
+            for (int i = 0; i < mini.TableSize(); i++) {
+                block.AppendLine(mini.FormatAddress(i));
+
+                if (i % batchSize.Value == 0) {
+                    StandardAPI.output(block);
+                    block.Clear();
+                }
+            }
+
+            StandardAPI.output(block);
+        }
+
+        public void Peek(Symbol<int> start, Symbol<int> end) {
+            for (int i = start.Value; i < end.Value; i++) {
+                StandardAPI.output(mini.FormatAddress(i));
+            }
         }
 
         public void Help(Symbol<int> ptr) {
@@ -115,6 +137,8 @@ namespace MiniASM.APIs.STD
         public override void Init(Interpreter mini) {
             this.mini = mini;
             AddFun("Peek");
+            AddFun("Peek", MetaSymbol.Num);
+            AddFun("Peek", MetaSymbol.Ptr, MetaSymbol.Ptr);
             AddFun("Help", MetaSymbol.Ptr);
             AddFun("Dump");
             AddFun("Dump", MetaSymbol.Str);
