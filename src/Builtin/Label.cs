@@ -39,6 +39,8 @@ namespace MiniASM.Builtin
         public override MetaSymbol Call(MetaSymbol[] args, object interpreter = null) {
             var ins = Interpreter.Instance;
 
+            bool cachedScope = Preprocessor.localDefinitionScope;
+
             // turn off global section scope, change to local scope
             Preprocessor.localDefinitionScope = true;
 
@@ -49,7 +51,7 @@ namespace MiniASM.Builtin
 
             // declare arguments
             DeclareArguments(args);
-            
+
             int defs = 0;
 
             // first pass, define inner labels
@@ -80,13 +82,19 @@ namespace MiniASM.Builtin
                 }
 
                 ins.Run(line);
+
+                if (ins.GetRegister<int>(3, Tokens.INT).Value == 1) {
+                    // this is a jusmp instruction to another label
+                    ins.SetRegister(3, new Symbol<int>(Tokens.INT, 0));
+                    break;
+                }
             }
 
             // destroy local data
             ins.Pop(ins.TableSize() - snapshot);
-            
+
             // exit scope
-            Preprocessor.localDefinitionScope = false;
+            Preprocessor.localDefinitionScope = cachedScope;
 
             calls++;
             return MetaSymbol.Nil;

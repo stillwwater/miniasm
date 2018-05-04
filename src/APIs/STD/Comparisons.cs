@@ -40,20 +40,34 @@ namespace MiniASM.APIs.STD
         public void Jmp(Symbol<int> ptr) {
             var label = mini.GetAddress<Instruction>(ptr.Value, Tokens.LBL, Tokens.FUN);
             mini.Run(label.Value.Identifier);
+            Ret();
         }
+
         public void Jmp(Symbol<int> ptr, MetaSymbol arg) {
             var fun = mini.GetAddress<Instruction>(ptr.Value, Tokens.LBL, Tokens.FUN).Value;
             object o = mini.FindObject(fun.ObjectIdentifier, noerror: true);
             o = o ?? mini;
 
             fun.Call(new MetaSymbol[] { arg }, o);
+            Ret();
         }
 
+        public void Ret() {
+            if (Preprocessor.localDefinitionScope) {
+                mini.SetRegister(3, new Symbol<int>(Tokens.INT, 1));
+            }
+        }
+
+        public MetaSymbol Ret(MetaSymbol value) {
+            Ret();
+            return value;
+        }
 
         public void Je(Symbol<int> label) {
             if (mini.GetRegister<float>(1, Tokens.NUM).Value == 0) {
                 // cmp <any> <any> == 0
                 mini.Run(GetLabel(label));
+                Ret();
             }
         }
 
@@ -61,18 +75,21 @@ namespace MiniASM.APIs.STD
             if (mini.GetRegister<float>(1, Tokens.NUM).Value != 0) {
                 // cmp <any> <any> != 0
                 mini.Run(GetLabel(label));
+                Ret();
             }
         }
 
         public void Jl(Symbol<int> label) {
             if (mini.GetRegister<float>(1, Tokens.NUM).Value < 0) {
                 mini.Run(GetLabel(label));
+                Ret();
             }
         }
 
         public void Jg(Symbol<int> label) {
             if (mini.GetRegister<float>(1, Tokens.NUM).Value > 0) {
                 mini.Run(GetLabel(label));
+                Ret();
             }
         }
 
@@ -91,6 +108,8 @@ namespace MiniASM.APIs.STD
             AddFun("Jne", MetaSymbol.Ptr);
             AddFun("Jl", MetaSymbol.Ptr);
             AddFun("Jg", MetaSymbol.Ptr);
+            AddFun("Ret");
+            AddFun("Ret", MetaSymbol.Any);
         }
 
         string GetLabel(Symbol<int> ptr) {

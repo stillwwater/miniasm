@@ -51,43 +51,47 @@ for cx 5 pcx	; 0 1 2 3 4
 
 `ctype (int addr, str type) -> num`: compares type of value in `addr` with the string representation of the type
 
----
-
-`jg (int addr) -> nil`: Jumps to `addr` if `ax`is greater than `0`
-
-`jl (int addr) -> nil`: Jumps to `addr` if `ax`is less than `0`
-
-`je (int addr) -> nil`: Jumps to `addr` if `ax`is `0`
-
-`jne (int addr) -> nil`: Jumps to `addr` if `ax`is not`0`
-
 ```assembly
 mylabel:
 	print $true
 end
 
-cmp 2 5
-print &ax	; <num> -1
-jl mylabel	; true
-
 str a: "hello"
 cmp &a $hello
 print &ax	; <num> 0
 je mylabel	; "hello" == $hello: true
-
-mov R5 &a	; copy value in a into R5
-mov a "hello world"
-cmp &a &R5
-print &ax	; <num> 1
-jg mylabel	; true
-
 ```
 
 ---
 
+`jg (int addr) -> nil`: Jumps to `addr` if `ax` is greater than `0`
+
+`jl (int addr) -> nil`: Jumps to `addr` if `ax` is less than `0`
+
+`je (int addr) -> nil`: Jumps to `addr` if `ax` is `0`
+
+`jne (int addr) -> nil`: Jumps to `addr` if `ax` is not `0`
+
 `jmp (int addr) -> nil`:
 
 `jmp (int addr, any param) -> nil`: Jumpts to addr
+
+`ret -> nil`: Returns `nil`
+
+`ret (any value) -> any`: Returns value
+
+Jump and return instructions can be used to interrupt the flow of a program.
+
+```assembly
+;; returns the largest of two numbers
+max (num a, num b):
+	cmp &a &b	; compare values in a and b
+	jl right	; if &a is less than &b jmp to `right`
+	ret &a		; otherwise return &a
+right:
+	ret &b		; return &b
+end
+```
 
 ## string :: APIs.STD.String
 
