@@ -21,7 +21,7 @@ namespace MiniASM.APIs.STD
 
                 if (i % batchSize.Value == 0) {
                     StandardAPI.output(block);
-                    block.Clear();
+                    block.Length = 0;
                 }
             }
 
@@ -129,7 +129,7 @@ namespace MiniASM.APIs.STD
             module.Value = Path.Combine(home, module.Value);
             Load(module);
         }
-        
+
         public static void CreateReference() {
             CreateReference("stdio", new InputOutput());
         }
