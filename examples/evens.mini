@@ -9,9 +9,12 @@ section ex:
 		mod &n 2		; move the result of mod &n 2 to the acumulator
 		cmp &ax 0		; compare the acumulator to 0
 		je pnum			; print n if the acumulator is 0 (&n mod 2 == 0)
+		continue
+	continue:
 		cmp &n 0
 		jg evens.a		; continue until &n == 0
 	pnum:
 		print &n
+		continue
 	end
 ends

@@ -44,8 +44,8 @@ io out
 ;; returns factorial of n
 f! (num n):
 	num a: 1
-	jmp f!.b
-	mov ax &a
+	f!.b
+	ret &a
 f!.b:
 	mul a &n
 	dec n
