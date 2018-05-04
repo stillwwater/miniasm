@@ -88,6 +88,7 @@ namespace MiniASM
 
         int lineNum;
         int tokenNum;
+        StringBuilder multiLineBuffer = new StringBuilder();
 
         LabelDef openLabel;
         List<string> labelBodyBuffer = new List<string>();
@@ -218,6 +219,10 @@ namespace MiniASM
             this.line = line[0] == Tokens.COMMENT ? line : line.Split(Tokens.COMMENT)[0].Trim();
 
             if (preprocessor.ParsePreprocessorExp(line)) return;
+
+            // if this line is split accross multiple lines
+            // handle it in ParseMultiline()
+            if (ParseMultiline()) return;
 
             // if this statemnt is not an expression
             // handle it in ParseNonExecutable()
@@ -421,6 +426,38 @@ namespace MiniASM
             }
 
             return def;
+        }
+
+        /// <summary>
+        /// Handles multiline
+        /// [line] { [line*] }
+        /// </summary>
+        bool ParseMultiline() {
+            int index;
+
+            if ((index = line.IndexOf(Tokens.OPEN_BRACE)) >= 0) {
+                multiLineBuffer.Append(line.Remove(index, 1));
+                multiLineBuffer.Append(Tokens.SEPARATOR);
+                return true;
+            }
+
+            if ((index = line.IndexOf(Tokens.CLOSE_BRACE)) >= 0) {
+                multiLineBuffer.Append(line.Remove(index, 1));
+
+                string expression = multiLineBuffer.ToString();
+                multiLineBuffer.Length = 0;
+
+                Run(expression);
+                return true;
+            }
+
+            if (multiLineBuffer.Length > 0) {
+                multiLineBuffer.Append(line);
+                multiLineBuffer.Append(Tokens.SEPARATOR);
+                return true;
+            }
+
+            return false;
         }
 
         /// <summary>

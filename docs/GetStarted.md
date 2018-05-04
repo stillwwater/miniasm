@@ -159,6 +159,25 @@ The preprocessor instruction `#include` can be used to avoid writing the section
 mylabel	; hello gelii
 ```
 
+## Multiline
+
+To separate a definition or expression across multiple lines, surround the block with braces (`{` `}`). This is expecially useful when dealing with long list definitions or instructions with many parameters.
+
+```assembly
+var mylist: str ({
+	'abc'
+	'123'
+})
+; compiles to `var mylist: str ('abc' '123')`
+
+mov {
+	ax
+	&mylist
+	1
+}
+; compiles to `mov ax &mylist 1`
+```
+
 Registers
 ---
 

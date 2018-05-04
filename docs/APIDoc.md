@@ -159,11 +159,11 @@ push mylist 5		; push 5 to mylist
 print &mylist		; (1 2 3 4 5)
 
 pop mylist		; pop value from mylist
-print ax		; <num> 5
+print &ax		; <num> 5
 print &mylist		; (1 2 3 4)
 
 pop mylist 2		; pop value from mylist at index 2
-print ax		; <num> 3
+print &ax		; <num> 3
 print &mylist		; (1 2 4)
 ```
 
