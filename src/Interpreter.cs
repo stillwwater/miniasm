@@ -145,8 +145,6 @@ namespace MiniASM
                 throw new InterpreterError("Error: Interpreter not initiated");
             }
 
-            //System.IO.File.WriteAllText("a", this.ToString());
-
             if (line == null) return;
 
             Parse(line);
@@ -157,6 +155,10 @@ namespace MiniASM
         public string StackTrace() {
             string st = string.Format("line #{0}", LineNum);
             return tokenNum == 0 ? st : string.Format("{0}, token #{1}", st, tokenNum);
+        }
+
+        public string FormatAddress(int address) {
+            return string.Format("[{0}] {1}", address.ToString().PadLeft(5, '0'), GetAddress(address));
         }
 
         void CheckCrucialRegisters() {
@@ -1017,7 +1019,7 @@ namespace MiniASM
 
             for (int i = 0; i < symbolTable.Count; i++) {
                 sb.Append("[");
-                sb.Append(i.ToString().PadLeft(4, '0'));
+                sb.Append(i.ToString().PadLeft(5, '0'));
                 sb.Append("] ");
                 sb.Append(symbolTable[i]);
                 sb.AppendLine();
