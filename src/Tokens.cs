@@ -38,6 +38,8 @@ namespace MiniASM
         public const char CLOSE_PAREN      = ')';
         public const char OPEN_BRACKET     = '[';
         public const char CLOSE_BRACKET    = ']';
+        public const char OPEN_BRACE       = '{';
+        public const char CLOSE_BRACE      = '}';
         public const char VALUE_MARKER     = '&';
         public const char LITERAL_MARKER   = '$';
         public const char PREPROCESSOR_DEF = '#';
