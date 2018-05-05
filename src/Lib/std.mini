@@ -89,4 +89,5 @@ section std:
 	mov R9 0
 	mov in ""
 	mov out ""
+	mov int 0
 ends

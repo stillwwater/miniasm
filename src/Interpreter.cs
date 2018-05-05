@@ -676,7 +676,7 @@ namespace MiniASM
                         // no parameters can be passed since it is expected that this label
                         // is part of the current block and therefore should use the same parameters
                         // as its parent.
-                        var instruction = GetAddress<Instruction>(tmpI, Tokens.LBL);
+                        var instruction = GetAddress<Instruction>(tmpI, Tokens.LBL, Tokens.FUN);
                         // execute the instruction
                         if (instruction.Type == Tokens.LBL) {
                             instruction.Value.Call(new MetaSymbol[0], this);
@@ -684,13 +684,18 @@ namespace MiniASM
                             tokens.Add(GetRegister(1));
                             continue;
                         }
+
+                        if (instruction.Type == Tokens.FUN) {
+                            object csobj = GetAddress<Obj>(instruction.Value.ObjectAddr, Tokens.OBJ).Value.Reference;
+                            var res = instruction.Value.Call(new MetaSymbol[0], csobj);
+                            // replace this token with the return value of the function
+                            tokens.Add(res);
+                            continue;
+                        }
                     }
 
-                    // dereference marker used to get the value of a single word string literal
-                    // obsolete: use '$' instead
-                    tokens.Add(new Symbol<string>(Tokens.STR, word));
-                    //throw new SyntaxError("<pointer>", word);
-                    continue;
+                    // nothing to dereference
+                    throw new UndefinedError(word);
                 }
 
                 //
