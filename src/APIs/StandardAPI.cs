@@ -7,16 +7,15 @@ using System.Text;
 using MiniASM.Builtin;
 using MiniASM.APIs.STD;
 
-#if UNITY_EDITOR
-
-using UnityEngine;
-
-#endif
-
 namespace MiniASM.APIs
 {
     public class StandardAPI
     {
+    #if UNITY_EDITOR
+        public static string libraryDirectory = @"Assets\Scripts\MiniASM\Lib";
+    #else
+        public static string libraryDirectory = AppDomain.CurrentDomain.BaseDirectory;
+    #endif
         public static Action<object> output = Console.WriteLine;
         public static Func<string> input = Console.ReadLine;
 

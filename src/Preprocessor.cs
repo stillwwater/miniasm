@@ -16,14 +16,7 @@ namespace MiniASM
         }
 
         public Preprocessor() {
-#if UNITY_EDITOR
-            string home = @"Assets\Scripts\Gelii\Lib";
-#else
-            string home = AppDomain.CurrentDomain.BaseDirectory;
-#endif
-            definitions = new Dictionary<string, string> {
-                { "home", home }
-            };
+            definitions = new Dictionary<string, string>();
         }
 
         public bool ParsePreprocessorExp(string line) {

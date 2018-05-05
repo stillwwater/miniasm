@@ -80,13 +80,13 @@ namespace MiniASM.APIs.STD
             switch (addr) {
                 case 6:
                     if (StandardAPI.input == null) {
-                        throw new InterpreterError("IOError: Input not supported");
+                        throw new InterpreterError("IO", "Input not supported");
                     }
                     mini.SetAddress(addr, new Symbol<string>(Tokens.STR, StandardAPI.input()));
                     break;
                 case 7:
                     if (StandardAPI.output == null) {
-                        throw new InterpreterError("IOError: Output not supported");
+                        throw new InterpreterError("IO", "Output not supported");
                     }
 
                     var output = mini.GetRegister(addr);
@@ -99,8 +99,16 @@ namespace MiniASM.APIs.STD
                     mini.SetRegister(addr, new Symbol<string>(Tokens.STR, ""));
                     break;
                 default:
-                    throw new InterpreterError("IOError not io register");
+                    throw new InterpreterError("IO", "Not io register");
             }
+        }
+
+        public void SetLD(Symbol<string> path) {
+            StandardAPI.libraryDirectory = path.Value;
+        }
+
+        public Symbol<string> GetLD() {
+            return new Symbol<string>(Tokens.STR, StandardAPI.libraryDirectory);
         }
 
         public void Load(Symbol<string> file) {
@@ -116,17 +124,15 @@ namespace MiniASM.APIs.STD
         }
 
         public void Import(Symbol<string> module) {
-            #if UNITY_EDITOR
-            string home = @"Assets\Scripts\Gelii\Lib";
-            #else
-            string home = AppDomain.CurrentDomain.BaseDirectory;
-            #endif
+            if (StandardAPI.libraryDirectory == null) {
+                throw new InterpreterError("IO", "No library folder defined, define it with `stdio.setld`");
+            }
 
             if (!module.Value.Contains(".")) {
                 module.Value += ".mini";
             }
 
-            module.Value = Path.Combine(home, module.Value);
+            module.Value = Path.Combine(StandardAPI.libraryDirectory, module.Value);
             Load(module);
         }
 
@@ -144,6 +150,8 @@ namespace MiniASM.APIs.STD
             AddFun("Dump", MetaSymbol.Str);
             AddFun("Debug", MetaSymbol.Str);
             AddFun("IO", MetaSymbol.Ptr);
+            AddFun("SetLD", MetaSymbol.Str);
+            AddFun("GetLD");
             AddFun("Load", MetaSymbol.Str);
             AddFun("Import", MetaSymbol.Str);
         }
