@@ -26,7 +26,7 @@ namespace MiniASM.APIs.STD
         }
 
         public Symbol<int> Sub(Symbol<int> a, Symbol<int> b) {
-            return new Symbol<int>(Tokens.NUM, a.Value - b.Value);
+            return new Symbol<int>(Tokens.INT, a.Value - b.Value);
         }
 
         public Symbol<float> Sub(Symbol<float> a, Symbol<float> b) {

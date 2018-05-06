@@ -24,7 +24,7 @@ namespace MiniASM.APIs.STD
         }
 
         public Symbol<Vector3> Div(Symbol<Vector3> a, Symbol<float> b) {
-            return new Symbol<Vector3>(Tokens.NUM, a.Value / b.Value);
+            return new Symbol<Vector3>(Tokens.VEC, a.Value / b.Value);
         }
     }
 }
