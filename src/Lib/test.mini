@@ -1,0 +1,45 @@
+section test:
+	num success: 0
+	num fail: 0
+
+	;; resets test data
+	reset:
+		mov test.success 0
+		mov test.fail 0
+	end
+
+	;; calls an instruction and asserts that the
+	;; return value is equal to zero
+	assert (int callptr):
+		assert &callptr 0
+	end
+
+	;; calls an instruction and asserts that the
+	;; return value is equal to the expected value
+	assert (int callptr, any expected):
+		call &callptr
+		cmp &ax &expected
+		jne fail
+		inc test.success
+	fail:
+		print 'fail at address '
+		print &callptr
+		print $
+		inc test.fail
+	end
+
+	;; prints test results
+	print_results:
+		mov out 'finished running '
+		add &test.fail &test.success
+		num total: &ax
+		str &total
+		add out &ax
+		add out ' tests ['
+		div &test.success &total
+		mul ax 100
+		str &ax
+		add out &ax
+		print '% coverage]'
+	end
+ends
