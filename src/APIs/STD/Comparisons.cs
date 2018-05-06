@@ -100,8 +100,8 @@ namespace MiniASM.APIs.STD
         public override void Init(Interpreter mini) {
             this.mini = mini;
             AddFun("Cmp", MetaSymbol.Any, MetaSymbol.Any);
-            AddFun("CType", MetaSymbol.Ptr, MetaSymbol.Str);
             AddFun("CType", MetaSymbol.Any, MetaSymbol.Any);
+            AddFun("CType", MetaSymbol.Ptr, MetaSymbol.Str);
             AddFun("Je", MetaSymbol.Ptr);
             AddFun("Jmp", MetaSymbol.Ptr);
             AddFun("Jmp", MetaSymbol.Ptr, MetaSymbol.Any);

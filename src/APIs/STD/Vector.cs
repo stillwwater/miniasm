@@ -31,6 +31,14 @@ namespace MiniASM.APIs.STD
             }
         }
 
+        public Symbol<float> Cmp(Symbol<Vector3> a, Symbol<Vector3> b) {
+            if (a.Value.x == b.Value.x && a.Value.y == b.Value.y && a.Value.z == b.Value.z) {
+                return new Symbol<float>(Tokens.NUM, 0);
+            }
+
+            return new Symbol<float>(Tokens.NUM, -1);
+        }
+
         public void Mov(Symbol<int> ptr, Symbol<Vector3> vec, Symbol<string> axis) {
             float num;
 
@@ -84,6 +92,7 @@ namespace MiniASM.APIs.STD
         public override void Init(Interpreter mini) {
             this.mini = mini;
             AddFun("For", MetaSymbol.Ptr, MetaSymbol.Vec3, MetaSymbol.Ptr);
+            AddFun("Cmp", MetaSymbol.Vec3, MetaSymbol.Vec3);
             AddFun("Mov", MetaSymbol.Ptr, MetaSymbol.Vec3, MetaSymbol.Str);
             AddFun("Mov", MetaSymbol.Ptr, MetaSymbol.Str, MetaSymbol.Num);
         }
