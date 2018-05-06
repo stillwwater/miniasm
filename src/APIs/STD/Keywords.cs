@@ -13,7 +13,12 @@ namespace MiniASM.APIs.STD
         public MetaSymbol Mov(MetaSymbol value) {
             return value;
         }
-        
+
+        public void Call(Symbol<int> ptr) {
+            var label = mini.GetAddress<Instruction>(ptr.Value, Tokens.LBL, Tokens.FUN);
+            mini.Run(label.Value.Identifier);
+        }
+
         public void For(Symbol<int> ptr, Symbol<float> max, Symbol<int> label) {
             var fun = mini.GetAddress<Instruction>(label.Value, Tokens.LBL, Tokens.FUN).Value;
 
@@ -41,6 +46,7 @@ namespace MiniASM.APIs.STD
             this.mini = mini;
             AddFun("Mov", MetaSymbol.Ptr, MetaSymbol.Any);
             AddFun("Mov", MetaSymbol.Any);
+            AddFun("Call", MetaSymbol.Ptr);
             AddFun("For", MetaSymbol.Ptr, MetaSymbol.Num, MetaSymbol.Ptr);
             AddFun("For", MetaSymbol.Ptr, MetaSymbol.Ptr, MetaSymbol.Ptr);
         }
