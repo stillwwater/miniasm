@@ -1,0 +1,69 @@
+section test->comp:
+	jmp:
+		jmp jmp.a
+		ret 1
+	jmp.a:
+		ret 0
+	end
+
+	jmp.1:
+		jmp jmp.a 0
+		ret 1
+	jmp.a (num x):
+		ret &x
+	end
+
+	je:
+		cmp 'abc' $abc
+		je je.a
+		ret 1
+	je.a:
+		ret 0
+	end
+
+	jne:
+		cmp 0 $0
+		jne jne.a
+		ret 1
+	jne.a:
+		ret 0
+	end
+
+	jl:
+		cmp 1.2456 3.1459
+		jl jl.a
+		ret 1
+	jl.a:
+		ret 0
+	end
+
+	jg:
+		cmp 3.1459 1.2456
+		jg jg.a
+		ret 1
+	jg.a:
+		ret 0
+	end
+
+	ctype:
+		num x: 6.12
+		ctype x $num
+		ret &ax
+	end
+
+	ctype.1:
+		ctype 3.1459 1.2456
+		ret &ax
+	end
+
+	run:
+		assert test->comp.jmp
+		assert test->comp.jmp.1
+		assert test->comp.je
+		assert test->comp.jne
+		assert test->comp.jl
+		assert test->comp.jg
+		assert test->comp.ctype
+		assert test->comp.ctype.1
+	end
+ends

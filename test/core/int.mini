@@ -1,0 +1,26 @@
+section test->int:
+	add:
+		add R2 R7
+		cmp &ax R9
+		ret &ax
+	end
+
+	sub:
+		sub int 2 int 7
+		cmp &ax int -5
+		ret &ax
+	end
+
+	to_int:
+		var x: $7
+		int &x
+		cmp &ax int 7
+		ret &ax
+	end
+
+	run:
+		assert test->int.add
+		assert test->int.sub
+		assert test->int.to_int
+	end
+ends

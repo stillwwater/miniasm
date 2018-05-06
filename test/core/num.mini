@@ -1,0 +1,53 @@
+section test->num:
+	add:
+		add 2 7
+		cmp &ax 9
+		ret &ax
+	end
+
+	sub:
+		sub 2 7
+		cmp &ax -5
+		ret &ax
+	end
+
+	mul:
+		mul 2 7
+		cmp &ax 14
+		ret &ax
+	end
+
+	div:
+		div 2 7
+		cmp &ax 0.2857143
+		ret &ax
+	end
+
+	mod:
+		mod 2 7
+		cmp &ax 2
+		ret &ax
+	end
+
+	pow:
+		pow 2 7
+		cmp &ax 128
+		ret &ax
+	end
+
+	to_num:
+		var x: $2
+		num &x
+		cmp &ax 2
+		ret &ax
+	end
+
+	run:
+		assert test->num.add
+		assert test->num.sub
+		assert test->num.mul
+		assert test->num.div
+		assert test->num.mod
+		assert test->num.pow
+	end
+ends

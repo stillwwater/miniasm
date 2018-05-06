@@ -1,0 +1,23 @@
+#include test
+
+import $test
+import $test/core/comp
+import $test/core/list
+import $test/core/vec
+import $test/core/math
+import $test/core/num
+import $test/core/int
+import $test/core/str
+
+test->comp.run
+test->list.run
+test->vec.run
+test->math.run
+test->num.run
+test->int.run
+test->str.run
+
+call print_results
+call reset
+
+mov R0 0

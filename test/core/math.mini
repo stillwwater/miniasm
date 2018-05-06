@@ -1,0 +1,68 @@
+section test->math:
+	add:
+		num x: 2
+		add x 7
+		cmp &x 9
+		ret &ax
+	end
+
+	sub:
+		var x: 2
+		sub x 7
+		cmp &x -5
+		ret &ax
+	end
+
+	mul:
+		num x: 2
+		mul x 7
+		cmp &x 14
+		ret &ax
+	end
+
+	div:
+		var x: 2
+		div x 7
+		cmp &x 0.2857143
+		ret &ax
+	end
+
+	mod:
+		var x: 2
+		mod x 7
+		cmp &x 2
+		ret &ax
+	end
+
+	pow:
+		var x: 2
+		pow x 7
+		cmp &x 128
+		ret &ax
+	end
+
+	inc:
+		var x: 0
+		inc x
+		cmp &x 1
+		ret &ax
+	end
+
+	dec:
+		var x: 0
+		dec x
+		cmp &x -1
+		ret &ax
+	end
+
+	run:
+		assert test->math.add
+		assert test->math.sub
+		assert test->math.mul
+		assert test->math.div
+		assert test->math.mod
+		assert test->math.pow
+		assert test->math.inc
+		assert test->math.dec
+	end
+ends

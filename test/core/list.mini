@@ -1,0 +1,52 @@
+section test->list:
+	size:
+		var x: num (0 0 0 0 0)
+		size &x
+		cmp &ax 5
+		ret &ax
+	end
+
+	get:
+		var x: str ($a $b $c)
+		mov ax &x 1
+		cmp &ax $b
+		ret &ax
+	end
+
+	set:
+		var x: str ($a $b $c)
+		mov x 1 $a
+		mov ax &x 1
+		cmp &ax $a
+		ret &ax
+	end
+
+	multiline:
+		var x: int ({
+			0 0 0
+			0 0 0
+		})
+		size &x
+		cmp &ax 6
+		ret &ax
+	end
+
+	multiline.1:
+		var x: str ({'this is truly'
+			'really' 'terrible'
+			'formatting'
+			'!'
+		})
+		size &x
+		cmp &ax 5
+		ret &ax
+	end
+
+	run:
+		assert test->list.size
+		assert test->list.get
+		assert test->list.set
+		assert test->list.multiline
+		assert test->list.multiline.1
+	end
+end

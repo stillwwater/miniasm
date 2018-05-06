@@ -1,0 +1,25 @@
+section test->str:
+	concat:
+		str x: 'hello '
+		add x $world
+		cmp &x 'hello world'
+		ret &ax
+	end
+
+	concat_val:
+		add $hello " world"
+		cmp &ax "hello world"
+		ret &ax
+	end
+
+	to_str:
+		str 9
+		cmp &ax $9
+	end
+
+	run:
+		assert test->str.concat
+		assert test->str.concat_val
+		assert test->str.to_str
+	end
+ends

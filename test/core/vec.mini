@@ -1,0 +1,60 @@
+section test->vec:
+	get:
+		var x: (0 1 2)
+		mov ax &x $y
+		cmp &ax 1
+		ret &ax
+	end
+
+	set:
+		var x: (0 1.2 2.3)
+		mov x $z 2.2
+		mov ax &x $z
+		cmp &ax 2.2
+		ret &ax
+	end
+
+	add:
+		var x: (1.1 1.1 1.1)
+		add x &x
+		cmp &x (2.2 2.2 2.2)
+		ret &ax
+	end
+
+	sub:
+		var x: (3 3 3)
+		sub x (1 1 1)
+		cmp &x (2 2 2)
+		ret &ax
+	end
+
+	mul:
+		var x: (1 2 3)
+		mul &x 2
+		cmp &ax (2 4 6)
+		ret &ax
+	end
+
+	div:
+		div (2 4 6) 2
+		cmp &ax (1 2 3)
+		ret &ax
+	end
+
+	for:
+		for cx (10 10 10) none
+		cmp &cx (9 9 9)
+		ret &ax
+	none:
+	end
+
+	run:
+		assert test->vec.get
+		assert test->vec.set
+		assert test->vec.add
+		assert test->vec.sub
+		assert test->vec.mul
+		assert test->vec.div
+		assert test->vec.for
+	end
+end
