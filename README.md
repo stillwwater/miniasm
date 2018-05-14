@@ -44,7 +44,7 @@ io out
 ;; returns factorial of n
 f! (num n):
 	num a: 1
-	f!.b
+	call f!.b
 	ret &a
 f!.b:
 	mul a &n
