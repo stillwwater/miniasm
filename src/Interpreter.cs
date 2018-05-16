@@ -473,7 +473,7 @@ namespace MiniASM
 
             words[0] = preprocessor.ReplaceDefined(words[0].Trim());
 
-            if (words[0][0] == Tokens.REGISTER_MARKER) {
+            if (Tokens.Address(words[0])) {
                 // first character in first word is 'R'
                 // this must be a return register
                 exp.returnRegister = ParseRegister(words[0]);
@@ -626,7 +626,7 @@ namespace MiniASM
                             tokens.Add(new Symbol<string>(Tokens.STR, word));
                             break;
                         case Tokens.INT:
-                            tmpI = (word[0] == Tokens.REGISTER_MARKER) ? ParseRegister(word) : int.Parse(word);
+                            tmpI = (Tokens.Address(word)) ? ParseRegister(word) : int.Parse(word);
                             tokens.Add(new Symbol<int>(Tokens.INT, tmpI));
                             break;
                         case Tokens.NUM:
@@ -642,7 +642,7 @@ namespace MiniASM
                 // check if this is a reference to a register 'R' or a dereference symbol '&'
                 //
 
-                if (word[0] == Tokens.REGISTER_MARKER) {
+                if (Tokens.Address(word)) {
                     // this is a reference to a register, add a pointer to it
                     tokens.Add(new Symbol<int>(Tokens.INT, ParseRegister(word)));
                     continue;
@@ -658,7 +658,7 @@ namespace MiniASM
                     // remove '&'
                     word = preprocessor.ReplaceDefined(word.Substring(1));
 
-                    if (word[0] == Tokens.REGISTER_MARKER) {
+                    if (Tokens.Address(word)) {
                         // the following token is a register marker
                         // '&R12' -> 'R12' -> 12
                         int ptr = ParseRegister(word);
@@ -770,6 +770,10 @@ namespace MiniASM
             if (word.Length < 2) {
                 // this word does not have a number assigned to it
                 throw new SyntaxError("<ptr>", "<nil>");
+            }
+
+            if (word[1] == Tokens.HEX_DELIMITER) {
+                return Convert.ToInt32(word, 16);
             }
 
             string regname = word.Substring(1);

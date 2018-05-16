@@ -44,6 +44,8 @@ namespace MiniASM
         public const char LITERAL_MARKER   = '$';
         public const char PREPROCESSOR_DEF = '#';
         public const char REGISTER_MARKER  = 'R';
+        public const char ADDRESS_MARKER   = '#';
+        public const char HEX_DELIMITER    = 'x';
         public const char COMMENT          = ';';
         public const char DOUBLE_QUOTE     = '"';
         public const char TAB              = '\t';
@@ -65,9 +67,20 @@ namespace MiniASM
             return c == SINGLE_QUOTE || c == DOUBLE_QUOTE;
         }
 
+        internal static bool Address(string word) {
+            if (word.Length < 2) {
+                return false;
+            }
+
+            return (word[0] == REGISTER_MARKER)
+                || (word[0] == ADDRESS_MARKER)
+                || (word[1] == HEX_DELIMITER);
+        }
+
         internal static bool Instruction(MetaSymbol sym) {
             return sym.Type == LBL || sym.Type == FUN;
         }
+
 
         internal static bool Numerical(string type) {
             switch (type) {
