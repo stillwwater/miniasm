@@ -40,4 +40,10 @@ namespace MiniASM
         public PermissionError(string action, object obj)
             : base(string.Format("PermissionError: cannot {0} {1}", action, obj)) { }
     }
+
+    class TypeError : InterpreterError
+    {
+        public TypeError(string errorType, object expected, object found)
+            : base(string.Format("TypeError: invalid {0} type: expected {1}, found {2}", errorType, expected, found)) { }
+    }
 }

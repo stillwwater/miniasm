@@ -57,6 +57,7 @@ namespace MiniASM
             internal string[] signature;
             internal string[] args;
             internal bool inline;
+            internal string returnType;
 
             public override string ToString() {
                 var sb = new StringBuilder();
@@ -360,10 +361,11 @@ namespace MiniASM
         LabelDef ParseLabel() {
             tokenNum = 1;
             var def = new LabelDef();
-            // get name without ':', [label:] -> [label]
-            def.identifier = words[0];
             var signature = new List<string>();
             var args = new List<string>();
+
+            def.identifier = words[0];
+            def.returnType = Tokens.NIL;
 
             if (words.Length == 1) {
                 // this label has no parameters (signature)
@@ -383,6 +385,20 @@ namespace MiniASM
                 if (word[word.Length - 1] == Tokens.DEF_MARKER) {
                     // remove ':'
                     word = word.Substring(0, word.Length - 1);
+                }
+
+                if (word == Tokens.RET) {
+                    // next token must be a return type
+                    i++;
+                    word = words[i].Trim();
+                    word = word.Substring(0, word.Length - 1);
+
+                    if (Tokens.ValidType(word)) {
+                        def.returnType = word;
+                    } else {
+                        throw new SyntaxError("Valid return type", word);
+                    }
+                    continue;
                 }
 
                 if (word[0] == Tokens.OPEN_PAREN) {
@@ -734,6 +750,7 @@ namespace MiniASM
             openLabel.identifier = preprocessor.AddModule(openLabel.identifier);
             var label = new Label(
                 openLabel.identifier,
+                openLabel.returnType,
                 openLabel.signature,
                 openLabel.args,
                 labelBodyBuffer.ToArray(),

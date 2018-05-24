@@ -15,6 +15,7 @@ namespace MiniASM.Builtin
         string[] body;
         string[] argVariables;
         string objId;
+        string returnType;
 
         public string[] Body {
             get { return body; }
@@ -25,8 +26,9 @@ namespace MiniASM.Builtin
             set { objId = value; }
         }
 
-        public Label(string id, string[] sign, string[] args, string[] body, string[] doc) {
+        public Label(string id, string returnType, string[] sign, string[] args, string[] body, string[] doc) {
             this.id = id;
+            this.returnType = returnType;
             this.sign = sign;
             this.body = body;
             this.doc = doc;
@@ -34,7 +36,7 @@ namespace MiniASM.Builtin
             objId = base.ObjectIdentifier;
         }
 
-        public Label(string id) : this(id, new string[0], new string[0], new string[0], new string[0]) { }
+        public Label(string id) : this(id, Tokens.NIL, new string[0], new string[0], new string[0], new string[0]) { }
 
         public override MetaSymbol Call(MetaSymbol[] args, object interpreter = null) {
             var ins = Interpreter.Instance;
@@ -97,12 +99,21 @@ namespace MiniASM.Builtin
             Preprocessor.localDefinitionScope = cachedScope;
 
             calls++;
+            CheckReturnType(ins.GetRegister(1));
             return MetaSymbol.Nil;
         }
 
         void DeclareArguments(MetaSymbol[] args) {
             for (int i = 0; i < args.Length; i++) {
                 Interpreter.Instance.Push(argVariables[i], args[i]);
+            }
+        }
+
+        void CheckReturnType(MetaSymbol ax) {
+            if (returnType == Tokens.NIL) return;
+
+            if (ax.Type != returnType) {
+                throw new TypeError("return", returnType, ax.Type);
             }
         }
 

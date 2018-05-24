@@ -24,6 +24,7 @@ namespace MiniASM
         public const string END = "end";
         public const string DOC = ";;";
         public const string DEF = ":";
+        public const string RET = "->";
 
         // Errors
         public const string TYPE_ERR   = "TypeError";
