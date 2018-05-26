@@ -99,7 +99,7 @@ Extended `go` library
 
 The `game` API is used to interface with the Unity Engine, however it is not specific to `gameobjects`, rather it exposes other engine features.
 
-`loop (int callptr) -> nil`: calls instruction at `callptr` every frame
+`update (int callptr) -> nil`: calls instruction at `callptr` every frame
 
 ```asm
 update:
@@ -109,5 +109,5 @@ end
 go.spawn $cube
 go.push &ax
 
-loop update
+_update update
 ```

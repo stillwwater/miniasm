@@ -11,7 +11,7 @@ namespace MiniASM.APIs
         protected Interpreter gelii;
         Stack<Instruction> updateStack = new Stack<Instruction>();
 
-        public void Loop(Symbol<int> ptr) {
+        public void _Update(Symbol<int> ptr) {
             var label = gelii.GetAddress<Instruction>(ptr.Value, Tokens.LBL, Tokens.FUN);
             updateStack.Push(label.Value);
         }
@@ -27,7 +27,7 @@ namespace MiniASM.APIs
             this.gelii = gelii;
             gelii.AddObj(new Obj("game", this));
 
-            AddFun("Loop", MetaSymbol.Ptr);
+            AddFun("_Update", MetaSymbol.Ptr);
         }
 
         #endregion
