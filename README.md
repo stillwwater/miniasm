@@ -12,6 +12,25 @@ Check out the get started guide, how to extend interpreter functionality and the
 
 Here are some example programs:
 
+### Factorial
+
+```assembly
+;; returns factorial of n
+f! (num n) -> num:
+	num a: 1	; declare variable a
+	call _		; call subprocedure _
+	ret &a		; return value stored in a
+_:
+	mul a &n	; multiply a by the value in n
+	dec n		; decrement n by 1
+	cmp &n 1	; compare value in n to 1
+	jg _		; jump to _ if &n is greater than 1
+end
+
+f! 5
+print &ax		; <num> 120
+```
+
 ### Hello World
 
 ```assembly
@@ -20,10 +39,9 @@ io out			; hello world!
 ```
 
 ```assembly
-;; this is a label
-;; it can be used like a macro to group instructions
+;; this is a procedure
 print (str s):
-	mov out &s	; change 'mov' to 'add' for a superior implementation
+	mov out &s
 	io out
 end
 
@@ -38,29 +56,13 @@ mov out &in
 io out
 ```
 
-### Factorial
-
-```assembly
-;; returns factorial of n
-f! (num n):
-	num a: 1
-	call f!.b
-	ret &a
-f!.b:
-	mul a &n
-	dec n
-	cmp &n 1
-	jg f!.b
-end
-
-f! 5	; <num> 120
-```
-
 ### Quine
 
 ```assembly
 mov R0 2
 ```
+
+This sets mini to its debug mode, which logs every internal instruction call. It's a cheating quine.
 
 ### Placing game objects randomly in a 3D grid
 
