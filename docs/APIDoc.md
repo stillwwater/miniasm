@@ -43,6 +43,19 @@ Loads APIs into memory.
 for cx 5 pcx	; 0 1 2 3 4
 ```
 
+`loop (int addr) -> nil`: Loops `addr` until register `ax` is `0`
+
+```assembly
+mylabel:
+	print &ax
+	dec ax
+end
+
+mov ax 10	; set ax to 10
+loop mylabel	; calls mylbl until ax is 0
+		; 10 9 8 7 6 5 4 3 2 1
+```
+
 ## comp :: APIs.STD.Comparisons
 
 `cmp (any a, any b) -> num`: compares two values, returns answer to `ax`

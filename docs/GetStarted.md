@@ -84,10 +84,16 @@ mylabel.b		; UndefinedError
 The return type of a label can be specified, this ensures that the `ax` register has a value of an expected type.
 
 ```assembly
-myadd (int a, int b) -> int:
+myadd (num a, num b) -> num:
 	add a &b
 	ret &a
 end
+```
+
+Labels can be defined in a single line
+
+```assembly
+myadd (num a, num b) -> num: add &a &b
 ```
 
 Labels support overloading, by giving them a different signature.

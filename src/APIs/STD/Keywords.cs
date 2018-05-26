@@ -38,6 +38,17 @@ namespace MiniASM.APIs.STD
             For(ptr, mini.GetRegister<float>(max.Value, Tokens.NUM), label);
         }
 
+        public void Loop(Symbol<int> ptr) {
+            var fun = mini.GetAddress<Instruction>(ptr.Value, Tokens.LBL).Value;
+
+            int itreg = ptr.Value;
+            var args = new MetaSymbol[0];
+
+            while (mini.GetRegister<float>(1, Tokens.NUM).Value != 0) {
+                fun.Call(args, mini);
+            }
+        }
+
         public static void CreateReference() {
             CreateReference("kw", new Keywords());
         }
@@ -49,6 +60,7 @@ namespace MiniASM.APIs.STD
             AddFun("Call", MetaSymbol.Ptr);
             AddFun("For", MetaSymbol.Ptr, MetaSymbol.Num, MetaSymbol.Ptr);
             AddFun("For", MetaSymbol.Ptr, MetaSymbol.Ptr, MetaSymbol.Ptr);
+            AddFun("Loop", MetaSymbol.Ptr);
         }
     }
 }
